@@ -1,38 +1,49 @@
-import json
+import re
 import os
+import json
 
-
-
-
+# re module:-RegEx can be used to check if a string contains the specified search patter
+# os module:-Python OS module provides the facility to establish the interaction between the user and the operating system
 def storng_password(password):
-    if len(password)>6 and len(password)<16:
-        if ("#" in password or "@" in password):
-            if "1"in password or"2"in password or"3"in password or"4"in password or"5"in password or "6"in password or "7"in password or "8"in password or"9"in password or"0" in password :
-                return True
-            else:
-                print(password,"At least password should contain one number")
-                password1=input("enter your 1st password : ")
-                storng_password(password1)
-        else:
-            print(password,"At least password should contain one special character")
-            password1=input("enter your 1st password : ")
-            storng_password(password1)
-    else:
-        print(password,"At least password should length 6 to 16 digit")
-        password1=input("enter your 1st password :")
-        storng_password(password1)
+    flag=True
+    while flag==True:
+    
+        if len(password)>6 and len(password)<16:
+            if re.findall("[@#$%&*!]", password):#findall-The findall() function returns a list containing all matches.
+                if re.findall("[a-z]",password):
+                    if re.findall("[A-Z]",password):
+                        if re.findall("[0-9]",password):
+                            print("your password is strong password")
 
-def checkpassword(password1,password2):
-    if password1==password2:
+                            return password
+                            
+                        else:
+                            print(password,"At least password should contain one number")
+                            password=input("enter your 1st password : ")
+    
+                    else:
+                        print(password,"At least password should contain one Upper case letter")
+                        password=input("enter your 1st password : ")
+            
+                else:
+                    print(password,"At least password should contain one lower case letter")
+                    password=input("enter your 1st password : ")
+                
+            else:
+                print(password,"At least password should contain one special character")
+                password=input("enter your 1st password : ")
+            
+        else:
+                print(password,"At least password should length 6 to 16 digit")
+                password=input("enter your 1st password :")
+
+def checkpassword(a,password2):
+    if password2==a:
         print("password created.")
     else:
         print("Both password are not same")
-        password2=input("enter your password : ")
-        checkpassword(password1,password2)
-
-
-
-
+        password2=input("enter your confirm password : ")
+        checkpassword(a,password2)
 
 
 #*********code start from here***************
@@ -47,34 +58,38 @@ if file==False:
     if login_signup=="signup":
         user_name=input("enter your user name : ")
         password1=input("enter your 1st password : ")
-        storng_password(password1)
-        password2=input("enter your password : ")
-        checkpassword(password1,password2)
+        a=(storng_password(password1))
+        print(a)
+        password2=input("enter your confirm password : ")
+        checkpassword(a,password2)
         print("congrats",user_name,"you are Signed  up Successfully.")
         
         description=input("Information about you :")
-        date_of_birth=input("enter your date of birth : ")
+        date_of_birth=input("enter your date of birth (DD-MM-YYYY): ")
         hobbies=input("enter your hobies : ")
         gender=input("enter your gender (male or female) :")
+        
         
         mylist=[]
         user={}
         list1=["username","password","description","dob","hobbies","gender"]
-        list2=[user_name,password1,description,date_of_birth,hobbies,gender]
+        list2=[user_name,a,description,date_of_birth,hobbies,gender]
         for i in range(len(list1)):
             user.update({list1[i]:list2[i]})
         mylist.append(user)
 
         with open ("user.json","a")as p:
             json.dump(mylist,p,indent=4,)
+    print(user_name,"your account is successfully created")
 
 elif file==True:
     if login_signup=="signup":
         user_name=input("enter your user name : ")
         password1=input("enter your 1st password : ")
-        storng_password(password1)
-        password2=input("enter your password : ")
-        checkpassword(password1,password2)
+        a=storng_password(password1)
+        print(a)
+        password2=input("enter your confirm password : ")
+        checkpassword(a,password2)
         
         m=open("user.json","r")
         usname=m.read()
@@ -89,7 +104,7 @@ elif file==True:
             
             user={}
             list1=["username","password","description","dob","hobbies","gender"]
-            list2=[user_name,password1,description,date_of_birth,hobbies,gender]
+            list2=[user_name,a,description,date_of_birth,hobbies,gender]
             for i in range(len(list1)):
                 user.update({list1[i]:list2[i]})
             
@@ -121,4 +136,3 @@ elif file==True:
             else:
                 print("invalid account")
         
-            
